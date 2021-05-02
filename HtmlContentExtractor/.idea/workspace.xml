@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c0be99c4-980c-4704-bc83-a80c07a3003e" name="Default Changelist" comment="" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1qO50ZsOPKTeJVfgnlOAc5SBMCd" />
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="D:/finshTotalText.txt" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="Application.test">
+    <configuration name="HtmlContentExtractor" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="HtmlContentExtractor" />
+      <module name="HtmlContentExtractor" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="test" />
+      <module name="HtmlContentExtractor" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.test" />
+        <item itemvalue="Application.HtmlContentExtractor" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c0be99c4-980c-4704-bc83-a80c07a3003e" name="Default Changelist" comment="" />
+      <created>1616937573177</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1616937573177</updated>
+      <workItem from="1616937578992" duration="1484000" />
+      <workItem from="1616982131992" duration="5306000" />
+      <workItem from="1617064858547" duration="6439000" />
+      <workItem from="1617095511937" duration="7665000" />
+      <workItem from="1617190604629" duration="2509000" />
+      <workItem from="1617260092810" duration="6504000" />
+      <workItem from="1617279519012" duration="124000" />
+      <workItem from="1617279749467" duration="519000" />
+      <workItem from="1617284655085" duration="808000" />
+      <workItem from="1617285879965" duration="2269000" />
+      <workItem from="1617290848820" duration="47000" />
+      <workItem from="1617348570843" duration="2472000" />
+      <workItem from="1617354394656" duration="2293000" />
+      <workItem from="1617518655709" duration="3567000" />
+      <workItem from="1617610600604" duration="3920000" />
+      <workItem from="1617777346544" duration="1808000" />
+      <workItem from="1617786149592" duration="4596000" />
+      <workItem from="1617850862288" duration="1109000" />
+      <workItem from="1617873169960" duration="1771000" />
+      <workItem from="1618297500448" duration="6010000" />
+      <workItem from="1618716292171" duration="821000" />
+      <workItem from="1618928985971" duration="1251000" />
+      <workItem from="1619340264133" duration="2603000" />
+      <workItem from="1619941416065" duration="977000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+</project>

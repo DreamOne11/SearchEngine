@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Pages">
+    <output-path>$PROJECT_DIR$/out/artifacts/Pages</output-path>
+    <root id="archive" name="Pages.jar">
+      <element id="directory" name="cn">
+        <element id="directory" name="mxy">
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/Pages.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/Pages$WriteToHbaseReduce.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/Pages$ReadHDFSMap.class" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

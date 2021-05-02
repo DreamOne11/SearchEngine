@@ -1,0 +1,20 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="TFValue">
+    <output-path>$PROJECT_DIR$/out/artifacts/TFValue</output-path>
+    <root id="archive" name="TFValue.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="directory" name="cn">
+        <element id="directory" name="mxy">
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/TFValue$TFReduce.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/TFValue$TFPartition.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/TFValue$TFMap.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/TFValue.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/UrlWordBean.class" />
+        </element>
+      </element>
+      <element id="extracted-dir" path="$USER_HOME$/.m2/repository/com/huaban/jieba-analysis/1.0.2/jieba-analysis-1.0.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
