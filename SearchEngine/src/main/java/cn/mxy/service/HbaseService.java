@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import cn.mxy.dao.HbaseDao;
 import com.huaban.analysis.jieba.JiebaSegmenter;
@@ -58,8 +55,8 @@ public class HbaseService {
                 finishWords.add(word);
             }
         }
-        //将分词过滤后的关键词表传入TFIDFValue()
-
+        //将分词过滤后的关键词表传入TFIDFValue，获取排序后的url表
+        TFIDFValue(finishWords);
     }
 
     /***
@@ -83,16 +80,44 @@ public class HbaseService {
     }
 
     /***
-     * 计算TF-IDF值，返回排序后的url表
+     * 计算每个url的TF-IDF值，返回排序后的url表
      * @param finishWords
      * @return
      * @throws IOException
      */
-    private ArrayList<String> TFIDFValue(ArrayList<String> finishWords) throws IOException {
+    //todo 返回值类型记得修改
+    private void TFIDFValue(ArrayList<String> finishWords) throws IOException {
         //获取关键词IDF值表
         Map<String, Double> IDFMap= IDFValue(finishWords);
+        //用于存放单个keyword获取到的TF值
+        Map<String, Double> TFMap;
+        //用于存放排序后的url以及其TF-IDF值
+        Map<String, Double> TFIDFMap;
+        if (finishWords.size() == 1) {
+            //若只有一个关键词则直接按Map的TF值排序，因为IDF都是一个值
+            for(String keyword : finishWords) {
+                //获取该词的TF值
+                TFIDFMap = hbaseDao.getTFValue(keyword);
+                //进行Map的键排序，先将entrySet转换为List
+                List<Map.Entry<String, Double>> list = new ArrayList<>(TFIDFMap.entrySet());
+                //使用list.sort()降序排序
+                list.sort(new Comparator<Map.Entry<String, Double>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Double> o1, Map.Entry<String, Double> o2) {
+                        return o2.getValue().compareTo(o1.getValue());
+                    }
+                });
+            }
 
+        } else if (finishWords.size() >= 2) {
+            //多关键词，循环获取每个关键词的url-TF值
+            for(String keyword : finishWords) {
+                TFMap = hbaseDao.getTFValue(keyword);
+                //todo 第二层循环
+            }
+        }
 
+        return ;
     }
 
 

@@ -20,7 +20,7 @@ public class main {
         Table table = conn.getTable(tableName);
 
         //通过rowkey创建get对象，用于写入
-        Get get = new Get(Bytes.toBytes("@"));
+        Get get = new Get(Bytes.toBytes("1999"));
         get.setCheckExistenceOnly(true);
         Result result = table.get(get);//执行数据读取并返回结果对象
 

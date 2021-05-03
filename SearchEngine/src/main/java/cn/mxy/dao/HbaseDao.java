@@ -52,8 +52,7 @@ public class HbaseDao {
         Get get = new Get(rowkey);
         Result result = table.get(get);//执行数据读取并返回结果对象
         byte[] val = result.getValue(cf, qf);
-        wholepagescount = Bytes.toDouble(val);
-
+        wholepagescount = Double.valueOf(Bytes.toString(val));
         //关闭HBase连接
         table.close();
         return wholepagescount;
@@ -78,16 +77,20 @@ public class HbaseDao {
         byte[] qf = Bytes.toBytes("finalPagesCount");
 
         for(String rowkey:keywords){
-            //通过rowkey创建get对象，用于搜索
+            //通过rowkey创建get对象，用于判断该词的包含页面数是否算出
             Get get = new Get(Bytes.toBytes(rowkey));
             get.addColumn(Bytes.toBytes("Urls"), Bytes.toBytes("finalPagesCount"));  //指定get搜索列
             get.setCheckExistenceOnly(true);
             Result result = table.get(get);//执行数据读取并返回结果对象
 
-            //通过rowkey创建get对象，用于写入
+            //通过rowkey创建get对象，用于判读该词在不在TFValue表中
             Get get1 = new Get(Bytes.toBytes(rowkey));
-            get1.setCheckExistenceOnly(true);
+            get1.setCheckExistenceOnly(true);//加了此项的get只能用于判断数据存不存在
             Result result1 = table.get(get1);//执行数据读取并返回结果对象
+
+            //通过rowkey创建get对象，用于获取数据
+            Get get2 = new Get(Bytes.toBytes(rowkey));
+            Result result2 = table.get(get2);
 
             //判断关键词是否存在于TFValue表中
             if(result1.getExists()) {
@@ -95,13 +98,13 @@ public class HbaseDao {
                 if(result.getExists()){
                     System.out.println("数据存在！ " + result.getExists());
                     //若存在则获取，赋给返回值(键值对)
-                    byte[] val = result1.getValue(cf, qf);
+                    byte[] val = result2.getValue(cf, qf);
                     wordPagesCount.put(rowkey, Bytes.toInt(val));
                     //System.out.println("数据结果为：" +  wordPagesCount);
                 } else {
                     //若不存在，计算wordPagesCount并直接将其结果赋值给返回值
                     System.out.println("数据不存在！ " + result.getExists());
-                    Cell[] cells  = result1.rawCells();   //从结果对象中获取所有cell值
+                    Cell[] cells  = result2.rawCells();   //从结果对象中获取所有cell值
                     //word in pages计数
                     int wordpagescount = 0;
                     //遍历result中所有cell值
@@ -110,7 +113,7 @@ public class HbaseDao {
                         wordpagescount++;
                     }
                     //根据rowkey创建一个put对象
-                    Put put=new Put(Bytes.toBytes("year"));
+                    Put put=new Put(Bytes.toBytes(rowkey));
                     //在put对象中的指定列中写入cell值
                     put.addColumn(Bytes.toBytes("Urls"), Bytes.toBytes("finalPagesCount"), Bytes.toBytes(Integer.toString(wordpagescount)));
                     //执行写入
@@ -147,11 +150,15 @@ public class HbaseDao {
         Table table = Hbaseconnect().getTable(tableName);
 
         //通过rowkey创建get对象，用于获取总页面数
-        Get get = new Get(rowkey);
+        Get get = new Get(rowkey);//用于判断
         get.setCheckExistenceOnly(true);
-        Result result = table.get(get);//执行数据读取并返回结果对象
+        Result result = table.get(get);
+
+        Get get1 = new Get(rowkey);//用于获取
+        Result result1 = table.get(get1);//执行数据读取并返回结果对象
+
         if (result.getExists()) {
-            Cell[] cells  = result.rawCells();   //从结果对象中获取所有cell值
+            Cell[] cells  = result1.rawCells();   //从结果对象中获取所有cell值
             //遍历result中所有cell值
             for(Cell cell:cells) {
                 //获取cell的键值
