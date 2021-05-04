@@ -185,17 +185,17 @@ public class HbaseDao {
      * 返回List<ResultBean>
      * */
     //todo 测试List<Bean> 能否实现一个实例化的多个循环添加
-    public List<ResultBean> getPagesData(ArrayList<String> urls) throws IOException {
+    public List<ResultBean> getPagesData(List<Map.Entry<String, Double>> urls) throws IOException {
         List<ResultBean> resultBeanList = new ArrayList<>();
         //创建表名对象
         TableName tableName = TableName.valueOf("Pages");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
-        for(String rowkey:urls) {
+        for(Map.Entry<String, Double> stringDoubleEntry : urls) {
             ResultBean resultBean = new ResultBean();
-            resultBean.setUrl(rowkey);
+            resultBean.setUrl(stringDoubleEntry.getKey());
             //通过rowkey创建get对象，用于搜索
-            Get get = new Get(Bytes.toBytes(rowkey));
+            Get get = new Get(Bytes.toBytes(stringDoubleEntry.getKey()));
             Result result = table.get(get);
             //如何取？
             Cell[] cells  = result.rawCells();   //从结果对象中获取所有cell值

@@ -20,13 +20,14 @@ public class test {
         ArrayList<String> finishWords = new ArrayList<>();
         String a = "1999";
         finishWords.add(a);
+        List<Map.Entry<String, Double>> list;
 
         if (finishWords.size() == 1) {
             //若只有一个关键词则直接按Map的TF值排序
             for(String keyword : finishWords) {
                 TFIDFMap = hbaseDao.getTFValue(keyword);
                 //进行Map的键排序，先将entrySet转换为List
-                List<Map.Entry<String, Double>> list = new ArrayList<>(TFIDFMap.entrySet());
+                list = new ArrayList<>(TFIDFMap.entrySet());
                 //使用list.sort()排序
                 list.sort(new Comparator<Map.Entry<String, Double>>() {
                     @Override
