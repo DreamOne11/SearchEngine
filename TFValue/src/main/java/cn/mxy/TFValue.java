@@ -73,10 +73,8 @@ public class TFValue extends Configured implements Tool {
 
         // 创建作业
         Job job = Job.getInstance(conf, "TFValue");
-        String inPath = "/SearchEngine/extractedpages/extractedHtml11", outPath = "/SearchEngine/output";
-        System.out.println("args1=====" + inPath);
-        System.out.println("args2=====" + outPath);
-
+        String inPath = "/SearchEngine/extractedHtml";
+        System.out.println("inPath=====" + inPath);
 
         // 注入作业的主类
         //job.setJarByClass(TFValue.class);
@@ -88,7 +86,7 @@ public class TFValue extends Configured implements Tool {
 
         //其中自动注入Reduce类和Partition类
         TableMapReduceUtil.initTableReducerJob(
-                "TFValue",      // output table
+                "TFValue1",      // output table
                 TFReduce.class,        // reducer class
                 job,
                 TFPartition.class,     // partition class
@@ -112,12 +110,6 @@ public class TFValue extends Configured implements Tool {
         // 指定输入类型为：文本格式文件；注入文本输入格式类
         //job.setInputFormatClass(FileInputFormat.class);
         FileInputFormat.addInputPath(job, new Path(inPath));     //HDFS路径
-
-        // 指定输出格式为：文件格式文件；注入文本输出格式类
-        //job.setOutputFormatClass(FileOutputFormat.class);
-        // 指定作业的输出目录
-        FileOutputFormat.setOutputPath(job, new Path(outPath));     //HDFS路径
-
 
         ////////////////////////////////////////////////////////////
         // 作业的执行流程
@@ -217,7 +209,7 @@ public class TFValue extends Configured implements Tool {
                 //将网页总数填入UrlCount列组，设置rowkey
                 Put put = new Put(Bytes.toBytes("finalCount"));
                 //填入信息，指定：列族、列名、值 ，将每个词在每页的TF值填入Urls列族
-                put.addColumn(Bytes.toBytes("Urls"), Bytes.toBytes("finalPagesCount"), Bytes.toBytes("116920"));
+                put.addColumn(Bytes.toBytes("Urls"), Bytes.toBytes("finalPagesCount"), Bytes.toBytes(wordsCount));
                 context.write(NullWritable.get(), put);
             } else {
                 //循环遍历map

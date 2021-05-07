@@ -74,7 +74,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.EachWordPages">
+  <component name="RunManager" selected="Application.main">
     <configuration name="EachWordPages" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="cn.mxy.EachWordPages" />
       <module name="TFValue" />
@@ -131,10 +131,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.EachWordPages" />
         <item itemvalue="Application.main" />
-        <item itemvalue="Application.test" />
         <item itemvalue="Application.TFValue" />
+        <item itemvalue="Application.EachWordPages" />
+        <item itemvalue="Application.test" />
       </list>
     </recent_temporary>
   </component>
@@ -173,6 +173,9 @@
       <workItem from="1619765291398" duration="2952000" />
       <workItem from="1619941032023" duration="8443000" />
       <workItem from="1620023802809" duration="9133000" />
+      <workItem from="1620270959682" duration="2724000" />
+      <workItem from="1620294228380" duration="4334000" />
+      <workItem from="1620357321399" duration="12018000" />
     </task>
     <servers />
   </component>
@@ -191,11 +194,6 @@
           <url>file://$PROJECT_DIR$/src/main/java/cn/mxy/test.java</url>
           <line>35</line>
           <option name="timeStamp" value="17" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cn/mxy/main.java</url>
-          <line>24</line>
-          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

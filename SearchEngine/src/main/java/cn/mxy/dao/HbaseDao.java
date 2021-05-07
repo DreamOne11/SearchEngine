@@ -37,7 +37,7 @@ public class HbaseDao {
     public Double getWholePagesCount() throws IOException {
         Double wholepagescount = null;
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue");
+        TableName tableName = TableName.valueOf("TFValue1");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
 
@@ -52,7 +52,7 @@ public class HbaseDao {
         Get get = new Get(rowkey);
         Result result = table.get(get);//执行数据读取并返回结果对象
         byte[] val = result.getValue(cf, qf);
-        wholepagescount = Double.valueOf(Bytes.toString(val));
+        wholepagescount = (double) Bytes.toInt(val);
         //关闭HBase连接
         table.close();
         return wholepagescount;
@@ -68,7 +68,7 @@ public class HbaseDao {
         //实例化Map对象，用于保存每个keyword的返回值PagesCount
         Map<String, Integer> wordPagesCount = new HashMap<>();
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue");
+        TableName tableName = TableName.valueOf("TFValue1");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
         //定义列族
@@ -99,7 +99,7 @@ public class HbaseDao {
                     System.out.println("数据存在！ " + result.getExists());
                     //若存在则获取，赋给返回值(键值对)
                     byte[] val = result2.getValue(cf, qf);
-                    wordPagesCount.put(rowkey, Bytes.toInt(val));
+                    wordPagesCount.put(rowkey, Integer.valueOf(Bytes.toString(val)));
                     //System.out.println("数据结果为：" +  wordPagesCount);
                 } else {
                     //若不存在，计算wordPagesCount并直接将其结果赋值给返回值
@@ -145,7 +145,7 @@ public class HbaseDao {
         byte[] rowkey = Bytes.toBytes(rowKey);
 
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue");
+        TableName tableName = TableName.valueOf("TFValue1");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
 

@@ -12,6 +12,8 @@ import cn.mxy.pojo.ResultBean;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
 
+import javax.sound.midi.Soundbank;
+
 
 public class HbaseService {
     //定义停用词列表
@@ -89,14 +91,13 @@ public class HbaseService {
      * @return
      * @throws IOException
      */
-    //todo 返回值类型记得修改
-    private List<Map.Entry<String, Double>> TFIDFValue(ArrayList<String> finishWords) throws IOException {
+    public List<Map.Entry<String, Double>> TFIDFValue(ArrayList<String> finishWords) throws IOException {
         //获取关键词IDF值表
         Map<String, Double> IDFMap = IDFValue(finishWords);
         //用于存放单个keyword获取到的TF值
         Map<String, Double> TFMap;
         //用于存放排序后的url以及其TF-IDF值
-        Map<String, Double> TFIDFMap = null;
+        Map<String, Double> TFIDFMap = new HashMap<>();
         //用于url的排序
         List<Map.Entry<String, Double>> list = new ArrayList<>();
 
@@ -119,6 +120,7 @@ public class HbaseService {
         } else if (finishWords.size() >= 2) {
             //多关键词，循环IDF表获取每个关键词的url-TF值和该词的IDF值
             for(Map.Entry<String, Double> entry : IDFMap.entrySet()) {
+                //获取每个关键词的url-TF值表
                 TFMap = hbaseDao.getTFValue(entry.getKey());
                 Double IDFValue = entry.getValue();
                 //todo 第二层循环
@@ -133,7 +135,10 @@ public class HbaseService {
                         TFIDFMap.put(entry1.getKey(), TFIDF);
                     } else {
                         //若该url已存在，则TF-IDF值累加 todo 测试是累加，还是存为新的键值对！
-                        TFIDFMap.put(entry1.getKey(), TFIDFMap.get(entry1.getKey()) + TFIDF);
+                        double TFIDF1 = TFIDFMap.get(entry1.getKey()) + TFIDF;
+                        System.out.println(TFIDF1);
+                        TFIDFMap.put(entry1.getKey(), TFIDF1);
+                        System.out.println(TFIDFMap.get(entry1.getKey()));
                     }
                 }
             }

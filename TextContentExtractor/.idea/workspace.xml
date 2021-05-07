@@ -105,10 +105,25 @@
       <workItem from="1618729001977" duration="902000" />
       <workItem from="1618930795153" duration="362000" />
       <workItem from="1619766284134" duration="2094000" />
+      <workItem from="1620303203856" duration="289000" />
+      <workItem from="1620303569035" duration="928000" />
+      <workItem from="1620308298877" duration="750000" />
+      <workItem from="1620352703071" duration="707000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cn/mxy/TextContentExtractor.java</url>
+          <line>26</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

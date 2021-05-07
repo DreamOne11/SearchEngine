@@ -52,7 +52,7 @@ public class Pages extends Configured implements Tool {
 
         // 创建作业
         Job job = Job.getInstance(conf, "Pages");
-        String inPath = "/SearchEngine/extractedpages/extractedHtml1", outPath = "/SearchEngine/output";
+        String inPath = "/SearchEngine/extractedpages/extractedHtml.txt", outPath = "/SearchEngine/output";
         System.out.println("args1=====" + inPath);
         System.out.println("args2=====" + outPath);
 
@@ -108,40 +108,36 @@ public class Pages extends Configured implements Tool {
             String timeRaw = splits[1];
             String title = splits[2];
             String summaryRaw = splits[3].trim();
-
-            //url作为rowkey
-            ImmutableBytesWritable rowKey = new ImmutableBytesWritable(Bytes.toBytes(url));
-            //初始化put对象
-            Put put=new Put(Bytes.toBytes(url));
-            //存入标题
-            put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("title"), Bytes.toBytes(title));
-
-            //对原生时间进行处理，判断时间是否非null，并且在正常时间区间内，否则爬取其网页的Last-Modified
-            try {
-                if(isRightTime(timeRaw)) {
-                    put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("time"), Bytes.toBytes(timeRaw));
-                    System.out.println("时间在范围区间内 " + timeRaw);
-                } else {
-                    String gottenTime = "2020-11-15";
-                    put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("time"), Bytes.toBytes(gottenTime));
-                    System.out.println(url + " 的Last-Modified：" + gottenTime);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            //对原生正文内容进行提取，取前140个字
-            if (summaryRaw.length() > 140) {
-                String result = summaryRaw.substring(0, 140);
-                put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("summary"), Bytes.toBytes(result));
+            //过滤《附件下载》页面
+            if(title.equals("附件下载")){
+                return;
             } else {
+                //url作为rowkey
+                ImmutableBytesWritable rowKey = new ImmutableBytesWritable(Bytes.toBytes(url));
+                //初始化put对象
+                Put put=new Put(Bytes.toBytes(url));
+                //存入标题
+                put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("title"), Bytes.toBytes(title));
+                //存入正文
                 put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("summary"), Bytes.toBytes(summaryRaw));
+
+                //对原生时间进行处理，判断时间是否非null，并且在正常时间区间内，否则爬取其网页的Last-Modified
+                try {
+                    if(isRightTime(timeRaw)) {
+                        put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("time"), Bytes.toBytes(timeRaw));
+                        System.out.println("时间在范围区间内 " + timeRaw);
+                    } else {
+                        String gottenTime = "2020-11-15";
+                        put.addColumn(Bytes.toBytes("Data"), Bytes.toBytes("time"), Bytes.toBytes(gottenTime));
+                        System.out.println(url + " 的Last-Modified：" + gottenTime);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //map结果写入上下文
+                context.write(rowKey, put);
             }
-
-            //map结果写入上下文
-            context.write(rowKey, put);
         }
-
 
         //判断时间是否正确，符合规则
         private static boolean isRightTime(String timeRaw) throws Exception {

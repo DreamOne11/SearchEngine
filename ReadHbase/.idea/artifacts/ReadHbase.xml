@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ReadHbase">
+    <output-path>$PROJECT_DIR$/out/artifacts/ReadHbase</output-path>
+    <root id="archive" name="ReadHbase.jar">
+      <element id="directory" name="cn">
+        <element id="directory" name="mxy">
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/ReadHbase$SearchMap.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/ReadHbase.class" />
+          <element id="file-copy" path="$PROJECT_DIR$/target/classes/cn/mxy/ReadHbase$WriteReduce.class" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>
