@@ -192,6 +192,7 @@ public class HbaseDao {
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
         for(Map.Entry<String, Double> stringDoubleEntry : urls) {
+            //实例化resultBean对象
             ResultBean resultBean = new ResultBean();
             resultBean.setUrl(stringDoubleEntry.getKey());
             //通过rowkey创建get对象，用于搜索
