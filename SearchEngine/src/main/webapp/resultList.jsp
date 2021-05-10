@@ -12,8 +12,10 @@
 <html>
 <head>
     <title>${title} - SWPU搜索</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
+
 <div id="head">
     <div id="logo">
         <img class="schoolImage" src="./static/image/swpu_badge.jfif">
@@ -37,13 +39,20 @@
                 <div class="result">
                     <h2>
                         <a href="${page.url}">
-                                ${page.title}
+                            <%--<c:choose>
+                                <c:when test="${fn:length(page.title) > 18}">
+                                    <c:out value="${fn:substring(page.title, 0, 20)}..." />
+                                </c:when>
+                                <c:otherwise>
+                                    <c:out value="${page.title}" />
+                                </c:otherwise>
+                            </c:choose>--%>
                         </a>
                     </h2>
                     <div class="abstract">
                         <span class="url">${page.url}</span>
                         <span class="time">${page.time}</span>
-                        ${page.mainContent}
+                        <p>${page.mainContent}</p>
                     </div>
                 </div>
             </c:forEach>
@@ -62,8 +71,25 @@
     一共${sumUrlCount}条数据
 </div>
 <div id="foot">
-
 </div>
 
 </body>
+
+<%--<script type="text/javascript">
+    function renderMatchSubstring(str, substr)
+    {
+        var substrList = substr.split(/\s+/);
+        var regStr = "\(" + substrList.join("\)|\(") + "\)";
+        var reg = new RegExp(regStr,"g");
+        var matchResult = str.match(reg);
+        for(index in matchResult)
+        {
+            var regS = new RegExp("[^</]\(" + matchResult[index] + "\)","g");
+            str = str.replace(regS,"<span style='color:red'>$1</span>");
+        }
+        return str;
+    }
+    document.getElementById("title").innerHTML = renderMatchSubstring(${page.title}, ${keywords});
+</script>--%>
+
 </html>

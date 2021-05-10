@@ -5,7 +5,6 @@ import cn.mxy.pojo.ResultBean;
 import cn.mxy.service.HbaseService;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 
 @WebServlet(name = "resultListServlet")
@@ -21,14 +20,29 @@ public class resultListServlet extends HttpServlet {
 
     //实例化HbaseService对象
     private HbaseService hbaseService = new HbaseService();
+    //Object转List<T>
+    private static <T> List<T> castList(Object source, Class<T> clazz) {
+        List<T> result = new ArrayList<>();
+        if(source instanceof List<?>) {
+            for (Object o : (List<?>) source) {
+                result.add(clazz.cast(o));
+            }
+            return result;
+        }
+        return null;
+    }
 
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //将关键词传递到service层进行逻辑处理
         String input = request.getParameter("searchInfo");
         String str = new String(input.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        EnumMap<HbaseService.KeyWords, Object> map = hbaseService.getKeyWords(str);
         //pagesDataList获取完整结果列表
-        List<ResultBean> pagesDataList = hbaseService.getKeyWords(str);
+        List<ResultBean> pagesDataList = castList(map.get(HbaseService.KeyWords.resultBeanList), ResultBean.class);
+        //获取分词后的keywords String
+        String keywords = String.valueOf(map.get(HbaseService.KeyWords.breakKeyWords));
+
         int pageSize=10;//每页显示条数
         int pageCount = pagesDataList.size() % pageSize == 0 ? pagesDataList.size()/pageSize : pagesDataList.size()/pageSize + 1;//总分页页数
 
@@ -62,6 +76,7 @@ public class resultListServlet extends HttpServlet {
         request.setAttribute("currentpage", currentpage);
         request.setAttribute("pageCount", pageCount);
         request.setAttribute("sumUrlCount", pagesDataList.size());
+        request.setAttribute("keywords", keywords);
         //转发到list.jsp中
         request.getRequestDispatcher("resultList.jsp").forward(request,response);
 

@@ -11,6 +11,15 @@ import cn.mxy.dao.HbaseDao;
 import cn.mxy.pojo.ResultBean;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
+import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.queryparser.classic.QueryParser;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.highlight.*;
+import org.apache.lucene.search.highlight.Formatter;
+import org.wltea.analyzer.lucene.IKAnalyzer;
 
 import javax.sound.midi.Soundbank;
 
@@ -20,6 +29,13 @@ public class HbaseService {
     private static ArrayList<String> stopwords = new ArrayList<String>();
     //实例化Hbase Dao层对象
     private HbaseDao hbaseDao = new HbaseDao();
+    //用于返回多个值
+    public enum KeyWords{
+        resultBeanList,
+        breakKeyWords
+    }
+    //实例化Lucene操作对象
+    private HighLightService highLightService = new HighLightService();
 
     //从本地读取通用词文件，构建停用词表
     private void buildStopWordsList() throws IOException {
@@ -36,15 +52,20 @@ public class HbaseService {
 
     /***
      * 接收用户输入的查找词
-     * 分词、过滤停用词
+     * 分词、过滤停用词、关键词高亮处理 + 动态摘要
      * 返回结果：ResultBean列表
      * @param keywords
      * @throws IOException
      */
-    public List<ResultBean> getKeyWords(String keywords) throws IOException {
+    public EnumMap<KeyWords, Object> getKeyWords(String keywords) throws IOException, ParseException, InvalidTokenOffsetsException {
         //构建停用词表
         buildStopWordsList();
+        //构建返回值Map
+        EnumMap<KeyWords, Object> map =new EnumMap<KeyWords, Object>(KeyWords.class);
+        //用于存放分词后的关键词list
         ArrayList<String> finishWords = new ArrayList<>();
+        //用于存放分词后的关键词String
+        String keyWords = "";
         JiebaSegmenter segmenter = new JiebaSegmenter();
         List<SegToken> words = segmenter.process(keywords, JiebaSegmenter.SegMode.SEARCH);
 
@@ -55,15 +76,31 @@ public class HbaseService {
             if(stopwords.contains(word)) {
                 continue;
             } else {
-                //存入
+                //存入关键词list
                 finishWords.add(word);
+                //存入关键词String
+                keyWords = keyWords + word + " ";
             }
         }
         //将分词过滤后的关键词表传入TFIDFValue，获取排序后的url表
         List<Map.Entry<String, Double>> urlList = TFIDFValue(finishWords);
-        //调用DAO层getPagesData
-        return hbaseDao.getPagesData(urlList);
+        List<ResultBean> highLightResult = hbaseDao.getPagesData(urlList);
+
+        for (ResultBean value : highLightResult) {
+            //按url、时间、标题、正文的顺序写入Lucene
+            String[] info = {value.getUrl(), value.getTime(), value.getTitle(), value.getMainContent()};
+            highLightService.upDateIndex(info);
+            String[] afterInfo = highLightService.highLighter(keyWords.trim(), info);
+            value.setTitle(afterInfo[0]);
+            value.setMainContent(afterInfo[1]);
+        }
+
+        //调用DAO层getPagesData，作为函数第一个返回值
+        map.put(KeyWords.resultBeanList, hbaseDao.getPagesData(urlList));
+        map.put(KeyWords.breakKeyWords, keyWords);
+        return map;
     }
+
 
     /***
      * 获取WordPagesCount，并计算每个关键词的IDF值

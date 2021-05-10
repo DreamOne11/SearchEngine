@@ -51,15 +51,15 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources\static\image" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\WEB-INF\lib" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources\static\image" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -265,6 +265,8 @@
       <workItem from="1620372131327" duration="2753000" />
       <workItem from="1620374896785" duration="11285000" />
       <workItem from="1620441058510" duration="20661000" />
+      <workItem from="1620526338379" duration="20648000" />
+      <workItem from="1620612619374" duration="15915000" />
     </task>
     <servers />
   </component>
