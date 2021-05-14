@@ -52,16 +52,14 @@ public class HbaseService {
 
     /***
      * 接收用户输入的查找词
-     * 分词、过滤停用词、关键词高亮处理 + 动态摘要
+     * 分词、过滤停用词、关键词标红处理 + 动态摘要
      * 返回结果：ResultBean列表
      * @param keywords
      * @throws IOException
      */
-    public EnumMap<KeyWords, Object> getKeyWords(String keywords) throws IOException, ParseException, InvalidTokenOffsetsException {
+    public List<ResultBean> getKeyWords(String keywords) throws IOException, ParseException, InvalidTokenOffsetsException {
         //构建停用词表
         buildStopWordsList();
-        //构建返回值Map
-        EnumMap<KeyWords, Object> map =new EnumMap<KeyWords, Object>(KeyWords.class);
         //用于存放分词后的关键词list
         ArrayList<String> finishWords = new ArrayList<>();
         //用于存放分词后的关键词String
@@ -87,18 +85,21 @@ public class HbaseService {
         List<ResultBean> highLightResult = hbaseDao.getPagesData(urlList);
 
         for (ResultBean value : highLightResult) {
-            //按url、时间、标题、正文的顺序写入Lucene
-            String[] info = {value.getUrl(), value.getTime(), value.getTitle(), value.getMainContent()};
-            highLightService.upDateIndex(info);
-            String[] afterInfo = highLightService.highLighter(keyWords.trim(), info);
-            value.setTitle(afterInfo[0]);
-            value.setMainContent(afterInfo[1]);
+            if(!value.getUrl().equals("finalPagesCount")) { //排除finalPagesCount
+                //按url、时间、标题、正文的顺序写入Lucene
+                String[] info = {value.getUrl(), value.getTime(), value.getTitle(), value.getMainContent()};
+                highLightService.upDateIndex(info);//存入Lucene
+                String[] afterInfo = highLightService.highLighter(keyWords.trim(), info);//高亮，返回结果
+               if(afterInfo[0] != null) {//若没有标红信息，则不不改动
+                   value.setTitle(afterInfo[0]);
+               }
+               if(afterInfo[1] != null) {//若没有标红信息，则不不改动
+                   value.setMainContent(afterInfo[1]);
+               }
+            }
         }
 
-        //调用DAO层getPagesData，作为函数第一个返回值
-        map.put(KeyWords.resultBeanList, hbaseDao.getPagesData(urlList));
-        map.put(KeyWords.breakKeyWords, keyWords);
-        return map;
+        return highLightResult;
     }
 
 
@@ -160,7 +161,7 @@ public class HbaseService {
                 //获取每个关键词的url-TF值表
                 TFMap = hbaseDao.getTFValue(entry.getKey());
                 Double IDFValue = entry.getValue();
-                //todo 第二层循环
+                //第二层循环
                 for(Map.Entry<String, Double> entry1 : TFMap.entrySet()) {
                     double TFIDF = IDFValue * entry1.getValue();
                     //TF-IDF值保留9位小数，返回Double值
@@ -171,11 +172,9 @@ public class HbaseService {
                         //若该url在表中第一次出现，直接写入
                         TFIDFMap.put(entry1.getKey(), TFIDF);
                     } else {
-                        //若该url已存在，则TF-IDF值累加 todo 测试是累加，还是存为新的键值对！
+                        //若该url已存在，则TF-IDF值累加
                         double TFIDF1 = TFIDFMap.get(entry1.getKey()) + TFIDF;
-                        System.out.println(TFIDF1);
                         TFIDFMap.put(entry1.getKey(), TFIDF1);
-                        System.out.println(TFIDFMap.get(entry1.getKey()));
                     }
                 }
             }

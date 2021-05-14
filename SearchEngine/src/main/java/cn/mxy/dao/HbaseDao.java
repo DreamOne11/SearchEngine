@@ -37,7 +37,7 @@ public class HbaseDao {
     public Double getWholePagesCount() throws IOException {
         Double wholepagescount = null;
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue1");
+        TableName tableName = TableName.valueOf("TFValue2");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
 
@@ -68,7 +68,7 @@ public class HbaseDao {
         //实例化Map对象，用于保存每个keyword的返回值PagesCount
         Map<String, Integer> wordPagesCount = new HashMap<>();
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue1");
+        TableName tableName = TableName.valueOf("TFValue2");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
         //定义列族
@@ -145,7 +145,7 @@ public class HbaseDao {
         byte[] rowkey = Bytes.toBytes(rowKey);
 
         //创建表名对象
-        TableName tableName = TableName.valueOf("TFValue1");
+        TableName tableName = TableName.valueOf("TFValue2");
         //打开HBase连接并创建表对象
         Table table = Hbaseconnect().getTable(tableName);
 
@@ -194,33 +194,35 @@ public class HbaseDao {
         for(Map.Entry<String, Double> stringDoubleEntry : urls) {
             //实例化resultBean对象
             ResultBean resultBean = new ResultBean();
-            resultBean.setUrl(stringDoubleEntry.getKey());
-            //通过rowkey创建get对象，用于搜索
-            Get get = new Get(Bytes.toBytes(stringDoubleEntry.getKey()));
-            Result result = table.get(get);
-            //如何取？
-            Cell[] cells  = result.rawCells();   //从结果对象中获取所有cell值
-            //遍历result中所有cell值
-            for(Cell cell : cells) {
-                //获取cell的键值
-                byte[] cellValue = cell.getValueArray();
-                //获取cell键中的rowkey对应的列限定符和值
-                String column = Bytes.toString(cellValue, cell.getQualifierOffset(), cell.getQualifierLength());
+            if(!stringDoubleEntry.getKey().equals("finalPagesCount")) {//排除finalPagesCount非url的数据
 
-                if(column.equals("title")) {
-                    String title = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
-                    resultBean.setTitle(title);
-                } else if(column.equals("time")) {
-                    String time = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
-                    resultBean.setTime(time);
-                } else {
-                    //获取content
-                    String content = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
-                    resultBean.setMainContent(content);
+                resultBean.setUrl(stringDoubleEntry.getKey());//注入url
+                //通过rowkey创建get对象，用于搜索
+                Get get = new Get(Bytes.toBytes(stringDoubleEntry.getKey()));
+                Result result = table.get(get);
+                //如何取？
+                Cell[] cells  = result.rawCells();   //从结果对象中获取所有cell值
+                //遍历result中所有cell值
+                for(Cell cell : cells) {
+                    //获取cell的键值
+                    byte[] cellValue = cell.getValueArray();
+                    //获取cell键中的rowkey对应的列限定符和值
+                    String column = Bytes.toString(cellValue, cell.getQualifierOffset(), cell.getQualifierLength());
+
+                    if(column.equals("title")) {
+                        String title = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
+                        resultBean.setTitle(title);//注入title
+                    } else if(column.equals("time")) {
+                        String time = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
+                        resultBean.setTime(time);//注入time
+                    } else {
+                        //获取content
+                        String content = Bytes.toString(cellValue, cell.getValueOffset(), cell.getValueLength());
+                        resultBean.setMainContent(content);//注入mainContent
+                    }
                 }
+                resultBeanList.add(resultBean);//将一个网页的resultBean注入List
             }
-
-            resultBeanList.add(resultBean);
             table.close();   //关闭Table对象并断开Hbase连接
         }
         return resultBeanList;

@@ -77,3 +77,31 @@ html,body{
     border: none;
     font-size: 16px;
 }
+#foot{
+    position:absolute;
+    float: left;
+    background-color: #F7F7F7;
+    height: 40px;
+    width: 100%;
+    bottom: 0px;
+}
+#copycontent{
+    margin-left: auto;
+    margin-right: auto;
+    width: 1320px;
+    height: 40px;
+    line-height: 40px;
+    color: black;
+    font-size: 12px;
+    font-family: YouYuan;
+    text-align: center;
+    background-color: #F7F7F7;
+    overflow: hidden;
+}
+#copycontent img {
+    vertical-align: middle;
+}
+* {
+    margin: 0px;
+    padding: 0px;
+}

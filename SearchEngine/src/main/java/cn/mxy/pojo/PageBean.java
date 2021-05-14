@@ -4,13 +4,11 @@ import java.util.List;
 
 public class PageBean {
     private List<ResultBean> data; //获取的完整表
-    private Long total; //表中一共有多少条数据
-    private Integer pageSize = 10; //每页最多有多少条，默认10条，用户传入
-    private Integer currentPage = 1; //当前页为第几页，默认为第一页，用户传入
+    private Integer totalRecord; //表中一共有多少条数据
+    private Integer pageSize; //每页最多有多少条，默认10条，用户传入
+    private Integer currentPage; //当前页为第几页，默认为第一页，用户传入
     private Integer totalPage; //尾页（该表总共的页数），需要计算
 
-    private Integer beginPage; //需要展示的第一页标号
-    private Integer endPage; //需要展示的最后一页页标号
 
     public List<ResultBean> getData() {
         return data;
@@ -20,15 +18,16 @@ public class PageBean {
         this.data = data;
     }
 
-    public Long getTotal() {
-        return total;
+    public Integer getTotalRecord() {
+        return totalRecord;
     }
 
-    public void setTotal(Long total) {
-        this.total = total;
+    public void setTotalRecord(Integer totalRecord) {
+        this.totalRecord = totalRecord;
     }
 
     public Integer getPageSize() {
+        this.pageSize = 10;//默认10条
         return pageSize;
     }
 
@@ -37,6 +36,10 @@ public class PageBean {
     }
 
     public Integer getCurrentPage() {
+        //当currentPage<=1，则默认等于1
+        this.currentPage = this.currentPage <= 1 ? 1:this.currentPage;
+        //当currentPage>=总页数，则默认等于总页数
+        this.currentPage = this.currentPage >= getTotalPage() ? getTotalPage():this.currentPage;
         return currentPage;
     }
 
@@ -45,6 +48,7 @@ public class PageBean {
     }
 
     public Integer getTotalPage() {
+        this.totalPage = getTotalRecord() % getPageSize() == 0 ? getTotalRecord()/getPageSize():getTotalRecord()/getPageSize() + 1;
         return totalPage;
     }
 
@@ -52,19 +56,4 @@ public class PageBean {
         this.totalPage = totalPage;
     }
 
-    public Integer getBeginPage() {
-        return beginPage;
-    }
-
-    public void setBeginPage(Integer beginPage) {
-        this.beginPage = beginPage;
-    }
-
-    public Integer getEndPage() {
-        return endPage;
-    }
-
-    public void setEndPage(Integer endPage) {
-        this.endPage = endPage;
-    }
 }

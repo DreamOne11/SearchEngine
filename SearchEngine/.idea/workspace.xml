@@ -41,7 +41,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/webapp/WEB-INF/lib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/target/SearchEngine/static/image" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -51,15 +51,17 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\WEB-INF\lib" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources\static\image" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\专业课程\毕业设计\SearchEngine\target\SearchEngine\static\image" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\image" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\WEB-INF\lib" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -267,6 +269,10 @@
       <workItem from="1620441058510" duration="20661000" />
       <workItem from="1620526338379" duration="20648000" />
       <workItem from="1620612619374" duration="15915000" />
+      <workItem from="1620702093347" duration="20431000" />
+      <workItem from="1620785730142" duration="21698000" />
+      <workItem from="1620904951007" duration="12347000" />
+      <workItem from="1620959019440" duration="33576000" />
     </task>
     <servers />
   </component>
@@ -274,6 +280,15 @@
     <option name="version" value="1" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/cn/mxy/dao/HbaseDao.java</url>
+          <line>227</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="TFIDFMap" language="JAVA" />
