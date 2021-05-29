@@ -5,6 +5,7 @@ public class ResultBean {
     private String title;
     private String time;
     private String mainContent;
+    private Double tfidf;
 
     public String getUrl() {
         return url;
@@ -37,4 +38,13 @@ public class ResultBean {
     public void setMainContent(String mainContent) {
         this.mainContent = mainContent;
     }
+
+    public Double getTfidf() {
+        return tfidf;
+    }
+
+    public void setTfidf(Double tfidf) {
+        this.tfidf = tfidf;
+    }
+
 }

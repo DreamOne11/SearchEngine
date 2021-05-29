@@ -8,6 +8,7 @@
     height: 50px;
     width: 180px;
     float: left;
+    cursor: pointer;
 }
 .schoolLogo{
     position: relative;
@@ -20,6 +21,7 @@
     top: 17px;
     margin-left: 5px;
     font-size: 20px;
+    user-select: none;
 }
 .search{
     height: 40px;
@@ -66,9 +68,10 @@
     color: white;
     border: none;
     font-size: 16px;
+    cursor: pointer;
 }
 #searchNums{
-    margin-left: 150px;
+    margin-left: 185px;
 }
 .numsText{
     font-size: 15px;
@@ -80,7 +83,7 @@ h3{
     font-weight: normal;
 }
 #content{
-    margin-left: 150px;
+    margin-left: 185px;
     width: 648px;
 }
 .result{
@@ -99,10 +102,17 @@ h3{
     height: 46px;
     background-color: #F5F5F6;
 }
+#relative{
+    margin-left: 185px;
+}
+.relative-info{
+    font-size: 13px;
+    cursor: pointer;
+}
 #page-inner{
     height: 36px;
     padding-top: 10px;
-    margin-left: 150px;
+    margin-left: 185px;
     background-color: #F5F5F6;
 }
 .pageBottom{

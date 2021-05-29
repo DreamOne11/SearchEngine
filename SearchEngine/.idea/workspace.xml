@@ -48,20 +48,20 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2895277" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.editor" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp" />
-      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources\static\image" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\专业课程\毕业设计\SearchEngine\target\SearchEngine\static\image" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\image" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\WEB-INF\lib" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources" />
       <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp\static\js" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\webapp" />
+      <recent name="D:\专业课程\毕业设计\SearchEngine\src\main\resources\static\image" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -273,6 +273,20 @@
       <workItem from="1620785730142" duration="21698000" />
       <workItem from="1620904951007" duration="12347000" />
       <workItem from="1620959019440" duration="33576000" />
+      <workItem from="1621217161407" duration="5556000" />
+      <workItem from="1621304265347" duration="5342000" />
+      <workItem from="1621390434773" duration="14584000" />
+      <workItem from="1621472652692" duration="27171000" />
+      <workItem from="1621583680785" duration="2013000" />
+      <workItem from="1621607100361" duration="1876000" />
+      <workItem from="1621641317869" duration="1620000" />
+      <workItem from="1621660268199" duration="5941000" />
+      <workItem from="1621686345600" duration="2017000" />
+      <workItem from="1621771842689" duration="7303000" />
+      <workItem from="1621848221267" duration="264000" />
+      <workItem from="1621924317117" duration="8872000" />
+      <workItem from="1622082968550" duration="3881000" />
+      <workItem from="1622250189248" duration="29746000" />
     </task>
     <servers />
   </component>
@@ -280,15 +294,6 @@
     <option name="version" value="1" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/cn/mxy/dao/HbaseDao.java</url>
-          <line>227</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="TFIDFMap" language="JAVA" />

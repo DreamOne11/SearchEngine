@@ -8,20 +8,15 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import cn.mxy.dao.HbaseDao;
+import cn.mxy.dao.LuceneDao;
 import cn.mxy.pojo.ResultBean;
+import cn.mxy.utils.TimeRank;
 import com.huaban.analysis.jieba.JiebaSegmenter;
 import com.huaban.analysis.jieba.SegToken;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
-import org.apache.lucene.queryparser.classic.ParseException;
-import org.apache.lucene.queryparser.classic.QueryParser;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.highlight.*;
-import org.apache.lucene.search.highlight.Formatter;
-import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import javax.sound.midi.Soundbank;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.highlight.*;
+
 
 
 public class HbaseService {
@@ -29,13 +24,14 @@ public class HbaseService {
     private static ArrayList<String> stopwords = new ArrayList<String>();
     //实例化Hbase Dao层对象
     private HbaseDao hbaseDao = new HbaseDao();
-    //用于返回多个值
-    public enum KeyWords{
-        resultBeanList,
-        breakKeyWords
+    //实例化Lucene Dao层对象
+    private LuceneDao luceneDao = new LuceneDao();
+    //实例化TimeRank
+    private TimeRank timeRank = new TimeRank();
+    //获取全部页面数
+    private Double wholePagesCount = hbaseDao.getWholePagesCount();
+    public HbaseService() throws IOException {
     }
-    //实例化Lucene操作对象
-    private HighLightService highLightService = new HighLightService();
 
     //从本地读取通用词文件，构建停用词表
     private void buildStopWordsList() throws IOException {
@@ -51,7 +47,7 @@ public class HbaseService {
     }
 
     /***
-     * 接收用户输入的查找词
+     * 接收用户输入的查找词（从HBase中检索）
      * 分词、过滤停用词、关键词标红处理 + 动态摘要
      * 返回结果：ResultBean列表
      * @param keywords
@@ -82,36 +78,43 @@ public class HbaseService {
         }
         //将分词过滤后的关键词表传入TFIDFValue，获取排序后的url表
         List<Map.Entry<String, Double>> urlList = TFIDFValue(finishWords);
-        List<ResultBean> highLightResult = hbaseDao.getPagesData(urlList);
+        //用于存放原始结果表
+        List<ResultBean> resultBeanList = hbaseDao.getPagesData(urlList);
+        //加入时间因素排序的url表
+        List<Map.Entry<ResultBean, Double>> timeRankList = timeRankValue(resultBeanList);
+        //用于存放高亮后的结果表
+        List<ResultBean> highLightList = new ArrayList<>();
 
-        for (ResultBean value : highLightResult) {
-            if(!value.getUrl().equals("finalPagesCount")) { //排除finalPagesCount
+        //todo
+        System.out.println("开始高亮！！！");
+        //标红处理、动态摘要
+        for (Map.Entry<ResultBean, Double> value : timeRankList) {
+            if(!value.getKey().getUrl().equals("finalPagesCount")) { //排除finalPagesCount
                 //按url、时间、标题、正文的顺序写入Lucene
-                String[] info = {value.getUrl(), value.getTime(), value.getTitle(), value.getMainContent()};
-                highLightService.upDateIndex(info);//存入Lucene
-                String[] afterInfo = highLightService.highLighter(keyWords.trim(), info);//高亮，返回结果
+                String[] info = {value.getKey().getUrl(), value.getKey().getTime(), value.getKey().getTitle(), value.getKey().getMainContent()};
+                String[] afterInfo = luceneDao.highLighter(keyWords.trim(), info);//高亮，返回结果
                if(afterInfo[0] != null) {//若没有标红信息，则不不改动
-                   value.setTitle(afterInfo[0]);
+                   value.getKey().setTitle(afterInfo[0]);
                }
                if(afterInfo[1] != null) {//若没有标红信息，则不不改动
-                   value.setMainContent(afterInfo[1]);
+                   value.getKey().setMainContent(afterInfo[1]);
                }
+                highLightList.add(value.getKey());
             }
         }
-
-        return highLightResult;
+        //todo
+        System.out.println("高亮结束！！！");
+        return highLightList;
     }
 
 
     /***
      * 获取WordPagesCount，并计算每个关键词的IDF值
      * @param finishWords
-     * @return
+     * @return 返回IDF值
      * @throws IOException
      */
     private Map<String, Double> IDFValue(ArrayList<String> finishWords) throws IOException {
-        //获取全部页面数
-        Double wholePagesCount = hbaseDao.getWholePagesCount();
         //按关键词表获取每个关键词的IDF值
         Map<String, Integer> pagesCountMap = hbaseDao.getWordPagesCount(finishWords);
         Map<String, Double> IDFValue = new HashMap<>();
@@ -126,10 +129,10 @@ public class HbaseService {
     /***
      * 计算每个url的TF-IDF值，返回排序后的url表
      * @param finishWords
-     * @return
+     * @return TF-IDF值
      * @throws IOException
      */
-    public List<Map.Entry<String, Double>> TFIDFValue(ArrayList<String> finishWords) throws IOException {
+    private List<Map.Entry<String, Double>> TFIDFValue(ArrayList<String> finishWords) throws IOException {
         //获取关键词IDF值表
         Map<String, Double> IDFMap = IDFValue(finishWords);
         //用于存放单个keyword获取到的TF值
@@ -153,8 +156,9 @@ public class HbaseService {
                         return o2.getValue().compareTo(o1.getValue());
                     }
                 });
+                //todo
+                System.out.println("TF排序完成！！！！");
             }
-
         } else if (finishWords.size() >= 2) {
             //多关键词，循环IDF表获取每个关键词的url-TF值和该词的IDF值
             for(Map.Entry<String, Double> entry : IDFMap.entrySet()) {
@@ -163,7 +167,9 @@ public class HbaseService {
                 Double IDFValue = entry.getValue();
                 //第二层循环
                 for(Map.Entry<String, Double> entry1 : TFMap.entrySet()) {
+                    //TF-IDF值计算
                     double TFIDF = IDFValue * entry1.getValue();
+                    //double TFIDF = 1/Math.log(1/entry1.getValue()) * IDFValue;
                     //TF-IDF值保留9位小数，返回Double值
                     BigDecimal b = new BigDecimal(TFIDF);
                     TFIDF = b.setScale(9, BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -187,11 +193,45 @@ public class HbaseService {
                     return o2.getValue().compareTo(o1.getValue());
                 }
             });
+            //todo
+            System.out.println("IDF排序完成！！！！");
         }
 
         return list;
     }
 
+    /***
+     * 获取ResultBean中的time和TF-IDF
+     * 调用TimeRank计算时间百分比，计算每个网页的最终Rank值
+     * @param urls
+     * @return 返回Rank顺序排序的list
+     */
+    private List<Map.Entry<ResultBean, Double>> timeRankValue(List<ResultBean> urls) {
+        //用于url的排序
+        List<Map.Entry<ResultBean, Double>> list = new ArrayList<>();
+        //实例化Map对象，用于放resultbean和rank值
+        Map<ResultBean, Double> timeRankMap = new HashMap<>();
+        //循环处理每一个TF-IDF值，将其与时间因素结合
+        for(ResultBean resultBean : urls) {
+            Double timerank = timeRank.timeTFIDFValue(resultBean.getTime());//将网页年份转为时间百分比
+            String TFIDFStr = String.format("%E", resultBean.getTfidf());//直接格式化浮点数为科学计数
+            char N = TFIDFStr.charAt(TFIDFStr.length() - 1);//获取TFIDF值的最后一位，即数量级
+            int n = Integer.parseInt(String.valueOf(N));//将数量级转为int型
+            Double finalRank = resultBean.getTfidf() + timerank * Math.pow(10, -1*n);//计算最终的Rank值
+            timeRankMap.put(resultBean, finalRank);
+        }
 
+        //进行Map的键排序，先将entrySet转换为List
+        list = new ArrayList<>(timeRankMap.entrySet());
+        //使用list.sort()降序排序
+        list.sort(new Comparator<Map.Entry<ResultBean, Double>>() {
+            @Override
+            public int compare(Map.Entry<ResultBean, Double> o1, Map.Entry<ResultBean, Double> o2) {
+                return o2.getValue().compareTo(o1.getValue());
+            }
+        });
+
+        return list;
+    }
 
 }

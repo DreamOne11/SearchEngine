@@ -28,3 +28,4 @@ function isEmpty(str) {
     }
     return false;
 }
+

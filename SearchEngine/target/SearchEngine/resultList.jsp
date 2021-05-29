@@ -18,7 +18,8 @@
 </head>
 <body>
 
-<div id="head">
+    <%--添加一个回跳--%>
+    <div id="head">
     <div id="logo">
         <img class="schoolLogo" src="./static/image/swpu_badge.png">
         <span class="school">西南石油大学</span>
@@ -32,7 +33,8 @@
         </form>
     </div>
 </div>
-<div id="container">
+
+    <div id="container">
     <div id="searchNums">
         <span class="numsText">为您找到相关结果约${sumUrlCount}个</span>
     </div>
@@ -56,7 +58,17 @@
         </c:if>
     </div>
 </div>
-<div id="page">
+
+    <div id="relative">
+    <h3 class="relative-head"><span style='color:red'>${title}</span>的相关搜索</h3>
+    <c:if test="${!empty relativeTitle}">
+        <c:forEach items="${relativeTitle}" var="title">
+            <p class="relative-info">${title}</p>
+        </c:forEach>
+    </c:if>
+</div>
+
+    <div id="page">
     <div id="page-inner">
         <c:if test="${currentPage > 1}">
             <%--<a href="/resultListServlet?currentPage=1" class="indexBottom">首页</a>--%>
@@ -81,11 +93,10 @@
             <a href="/resultListServlet?currentPage=${currentPage + 1}" class="pageBottom" id="nextBottom">下一页&gt</a>
             <%--<a href="/resultListServlet?currentPage=${pageCount}" class="indexBottom">尾页</a>--%>
         </c:if>
-        当前第${currentPage}/${pageCount}页
-        一共${sumUrlCount}条数据
     </div>
 </div>
-<div id="foot">
+
+    <div id="foot">
     <div id="copycontent">
         <p>
             <img src="${pageContext.request.contextPath }/static/image/local.png" width="19" height="17" style="width: 19px; height: 17px;" />
@@ -98,6 +109,7 @@
         </p>
     </div>
 </div>
+
 <script type="text/javascript">
     $(".indexBottom, .pageBottom").each(function(){
         $(this).mouseover(function () {
@@ -119,6 +131,20 @@
     $(document).ready(function() {
         $("#"+${currentPage}).css({'background-color' : '#3951B3'});
         $("#"+${currentPage}).css({'color' : '#ffffff'});
+    });
+
+    $(function(){
+        $("p.relative-info").click(function(){
+            var title = $(this).text();
+            $("#searchInput").val(title);
+            $("#searchBtn").click();
+        });
+    });
+
+    $(function(){
+        $("#logo").click(function () {
+            $(window).attr('location',"${pageContext.request.contextPath }/index.jsp");
+        })
     });
 </script>
 </body>

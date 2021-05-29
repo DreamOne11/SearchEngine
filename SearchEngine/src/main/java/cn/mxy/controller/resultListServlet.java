@@ -39,6 +39,7 @@ public class resultListServlet extends HttpServlet {
 
         String str = (String) request.getSession().getAttribute("str");
         List<ResultBean> pagesDataList = castList(request.getSession().getAttribute("pagesDataList"), ResultBean.class);
+        List<String> relativeTitle = castList(request.getSession().getAttribute("relativeTitle"), String.class);
 
         //逻辑分页处理
         int pageSize=10;//每页显示条数
@@ -69,20 +70,12 @@ public class resultListServlet extends HttpServlet {
         //用于保存10个页面的数据，假分页
         List<ResultBean> subPagesList = pagesDataList.subList(fromIndex, toIndex);
 
-
-        //将集合对象转化为JSON的数据格式
-        /*ObjectMapper objectMapper = new ObjectMapper();
-        String json = objectMapper.writeValueAsString(subPagesList);
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().println(json);
-        System.out.println(json);*/
-
-
         request.setAttribute("title", str);
         request.setAttribute("subPagesList", subPagesList);
         request.setAttribute("currentPage", currentpage);
         request.setAttribute("pageCount", pageCount);
         request.setAttribute("sumUrlCount", pagesDataList.size());
+        request.setAttribute("relativeTitle", relativeTitle);
         //转发到list.jsp中
         request.getRequestDispatcher("resultList.jsp").forward(request,response);
 

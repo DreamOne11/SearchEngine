@@ -65,6 +65,8 @@ public class HbaseDao {
      * 返回<关键词，包含该词的页面数>的Map
      * */
     public Map<String, Integer> getWordPagesCount(ArrayList<String> keywords) throws IOException {
+        //todo
+        System.out.println("开始读取或计算WordPagesCount！！！");
         //实例化Map对象，用于保存每个keyword的返回值PagesCount
         Map<String, Integer> wordPagesCount = new HashMap<>();
         //创建表名对象
@@ -129,6 +131,8 @@ public class HbaseDao {
         }
         //关闭HBase连接
         table.close();
+        //todo
+        System.out.println("读取或计算WordPagesCount结束！！！");
         return wordPagesCount;
     }
 
@@ -139,6 +143,8 @@ public class HbaseDao {
      * 返回<url，TFValue>的Map
      * */
     public Map<String, Double> getTFValue(String rowKey) throws IOException {
+        //todo
+        System.out.println("开始读取HBase中的TFValue！！！！");
         //实例化Map对象，用于保存keyword在每个Url中的TFValue
         Map<String, Double> TFvalue = new HashMap<>();
         //定义rowkey
@@ -173,7 +179,6 @@ public class HbaseDao {
             //要是关键词(rowkey)不在表中，则返回空表
             return TFvalue;
         }
-
         table.close();   //关闭Table对象并断开Hbase连接
         return TFvalue;
     }
@@ -184,8 +189,9 @@ public class HbaseDao {
      * param:按TFValue从大到小的顺序排列的url列表
      * 返回List<ResultBean>
      * */
-    //todo 测试List<Bean> 能否实现一个实例化的多个循环添加
     public List<ResultBean> getPagesData(List<Map.Entry<String, Double>> urls) throws IOException {
+        //todo
+        System.out.println("开始读取HBase中的Pages！！！！");
         List<ResultBean> resultBeanList = new ArrayList<>();
         //创建表名对象
         TableName tableName = TableName.valueOf("Pages");
@@ -197,6 +203,7 @@ public class HbaseDao {
             if(!stringDoubleEntry.getKey().equals("finalPagesCount")) {//排除finalPagesCount非url的数据
 
                 resultBean.setUrl(stringDoubleEntry.getKey());//注入url
+                resultBean.setTfidf(stringDoubleEntry.getValue());//注入tfidf
                 //通过rowkey创建get对象，用于搜索
                 Get get = new Get(Bytes.toBytes(stringDoubleEntry.getKey()));
                 Result result = table.get(get);
@@ -223,8 +230,11 @@ public class HbaseDao {
                 }
                 resultBeanList.add(resultBean);//将一个网页的resultBean注入List
             }
-            table.close();   //关闭Table对象并断开Hbase连接
+
         }
+        table.close();   //关闭Table对象并断开Hbase连接
+        //todo
+        System.out.println("读取HBase中的Pages结束！！！！");
         return resultBeanList;
     }
 }

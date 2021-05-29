@@ -21,6 +21,7 @@ html,body{
     height: 80px;
     width: 80px;
     border-radius:50%;
+    user-select: none;
 }
 .schoolName{
     height: 80px;
@@ -30,6 +31,7 @@ html,body{
     font-family: STXingkai, serif;
     margin-top: 14px;
     float: right;
+    user-select: none;
 }
 .search{
     height: 44px;
@@ -76,6 +78,92 @@ html,body{
     color: white;
     border: none;
     font-size: 16px;
+    cursor: pointer;
+}
+.qs-container{
+    width: 128px;
+    height: 36px;
+    position:absolute;
+    top:54%;
+    right: 21%;
+    background-color: transparent;
+}
+.qs-text{
+    font-size: 14px;
+    font-family: inherit;
+    position: relative;
+    float: left;
+    margin-top: 6px;
+    margin-left: 6px;
+    color: #464646;
+    display:none;
+    cursor: pointer;
+}
+.qs-bottom{
+    width: 32px;
+    height: 32px;
+    position: relative;
+    display: flex;
+    float: right;
+    margin-right: 5px;
+    justify-content: center;
+    align-items: center;
+    border-radius:50%;
+    cursor:pointer;
+}
+.qs-image{
+    width: 16px;
+    height: 16px;
+}
+#quickSearch{
+    height: 88px;
+    width: 896px;
+    background-color: transparent;
+    position:absolute;
+    top:60%;
+    left: 21%;
+    overflow: hidden;
+}
+.item{
+    width: 112px;
+    height: 88px;
+    background-color: transparent;
+    float: left;
+    flex-direction: row;
+    border-radius: 4px;
+    box-shadow: none;
+    cursor:pointer;
+}
+.image-border{
+    display: flex;
+    justify-content: center;
+    position: relative;
+    margin-top: 10px;
+}
+.image-container{
+    height: 44px;
+    width: 44px;
+    background-color: white;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+.image{
+    height: 24px;
+    width: 24px;
+}
+.title-container{
+    display: flex;
+    justify-content: center;
+    margin: 6px 0px 0px;
+    width: 100%;
+}
+.title{
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 400;
+    color: #464646;
 }
 #foot{
     position:absolute;
